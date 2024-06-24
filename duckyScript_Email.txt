@@ -42,7 +42,7 @@ STRINGLN $attachment = New-Object System.Net.Mail.Attachment($fileAttachment)
 STRINGLN $message.Attachments.Add($attachment)
 
 REM Setup SMTP-Client und senden der E-Mail
-REM Port 587 für TLS
+REM Port 587 für TLS Protokoll
 $smtp = New-Object Net.Mail.SmtpClient($smtpServer, 587)  
 $smtp.EnableSsl = $true
 
